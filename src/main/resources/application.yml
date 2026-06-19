@@ -1,0 +1,73 @@
+server:
+  port: 9001
+  forward-headers-strategy: framework
+
+spring:
+  application:
+    name: sms-stock-service
+
+  datasource:
+    url: jdbc:h2:mem:stockdb
+    driver-class-name: org.h2.Driver
+    username: sa
+    password:
+
+  jpa:
+    hibernate:
+      ddl-auto: update
+
+  h2:
+    console:
+      enabled: true
+
+  kafka:
+    bootstrap-servers: 192.168.0.5:9092
+    producer:
+      key-serializer: org.apache.kafka.common.serialization.StringSerializer
+      value-serializer: org.springframework.kafka.support.serializer.JsonSerializer
+    consumer:
+      group-id: stock-group
+      auto-offset-reset: earliest
+      key-deserializer: org.apache.kafka.common.serialization.StringDeserializer
+      value-deserializer: org.springframework.kafka.support.serializer.JsonDeserializer
+      properties:
+        spring.json.trusted.packages: "com.professionalit.model"
+        spring.json.value.default.type: "com.professionalit.model.StockPrice"
+  data:
+    redis:
+      host: 127.0.0.1
+      port: 6379
+      timeout: 60000    
+       
+      
+logging:
+  file:
+    name: D:/PROFESSIONALIT_GitRepository_WorkSpace/PIJRTP07_StockeMarket_Backend_API_Workspace/Manish-Github/logs/banking.log
+  level:
+    com.professionalit.service.KafkaConsumer : INFO
+  pattern:
+    console: "%d{yyyy-MM-dd HH:mm:ss} [%thread] %-5level %logger{36} - %msg%n" 
+
+
+
+eureka:
+  client:
+    service-url:
+      defaultZone: http://localhost:8761/eureka
+      
+management:
+  tracing:
+    sampling:
+      probability: 1.0
+
+  zipkin:
+    tracing:
+      endpoint: http://localhost:9411/api/v2/spans      
+      
+
+stock:
+  services:
+    default-provider: LOCAL
+    finnhub:
+      base-url: https://finnhub.io/api/v1
+      token: ${FINNHUB_API_TOKEN:d86tl91r01qoa0rs6sb0d86tl91r01qoa0rs6sbg}

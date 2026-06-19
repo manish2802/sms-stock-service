@@ -52,15 +52,7 @@ public class StockService {
                     .divide(openingPrice, 2, RoundingMode.HALF_UP);
         }
 
-        return new StockDto(
-                normalizedSymbol,
-                normalizedSymbol,
-                currentPrice,
-                change,
-                changePercent,
-                safeValue(quote.h()),
-                safeValue(quote.l()),
-                0L);
+        return null;
     }
 
     private String requireToken() {
