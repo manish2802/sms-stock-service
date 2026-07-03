@@ -41,7 +41,6 @@ public class AllStockKafkaSchedular {
 			StockDto event = new StockDto(stock.symbol(), stock.companyName(), round(currentPrice),
 					round(previousPrice), round(change), round(changePercent), 10000L + random.nextInt(50000),
 					stock.exchange(), System.currentTimeMillis());
-
 			kafkaTemplate.send("stock-topic", stock.symbol(), event);
 		});
 	}

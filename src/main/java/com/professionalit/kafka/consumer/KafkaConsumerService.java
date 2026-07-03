@@ -43,7 +43,6 @@ public class KafkaConsumerService {
 	@KafkaListener(topics = "topgainer-stock-topic", groupId = "topgainer-stock-group", concurrency = "2")
 	public void consume1(ConsumerRecord<String, String> record, StockDto message) {
 		System.out.println(Thread.currentThread().getName() + " -> " + message);
-       
 		messagingTemplate.convertAndSend("/topic/top-gainers", message);
 		redisTemplate.opsForHash().put("TOP_GAINER_STOCKS", message.symbol(), message);
 
