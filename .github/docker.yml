@@ -30,10 +30,10 @@ jobs:
 
       - name: Build Docker Image
         run: |
-          docker build -t manish2802/springboot-app:${{ github.sha }} .
-          docker tag manish2802/springboot-app:${{ github.sha }} manish2802/springboot-app:latest
+          docker build -t manish28/springboot-app:${{ github.sha }} .
+          docker tag manish28/springboot-app:${{ github.sha }} manish2802/springboot-app:latest
 
       - name: Push Docker Image
         run: |
-          docker push manish2802/springboot-app:${{ github.sha }}
-          docker push manish2802/springboot-app:latest
+          docker push manish28/springboot-app:${{ github.sha }}
+          docker push manish28/springboot-app:latest
