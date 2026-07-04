@@ -22,18 +22,27 @@ jobs:
       - name: Build Application
         run: mvn clean package -DskipTests
 
+      - name: Verify Docker Secret
+        run: |
+          if [ -z "${{ secrets.DOCKER_PASSWORD }}" ]; then
+            echo "DOCKER_PASSWORD is EMPTY"
+            exit 1
+          else
+            echo "DOCKER_PASSWORD is available"
+          fi
+
       - name: Login to Docker Hub
         uses: docker/login-action@v3
         with:
-          username: manish28
+          username: ${{ secrets.DOCKER_USERNAME }}
           password: ${{ secrets.DOCKER_PASSWORD }}
 
       - name: Build Docker Image
         run: |
-          docker build -t manish28/stockservice:${{ github.sha }} .
-          docker tag manish28/stockservice:${{ github.sha }} manish2802/stockservice:latest
+          docker build -t ${{ secrets.DOCKER_USERNAME }}/stockservice:${{ github.sha }} .
+          docker tag ${{ secrets.DOCKER_USERNAME }}/stockservice:${{ github.sha }} ${{ secrets.DOCKER_USERNAME }}/stockservice:latest
 
       - name: Push Docker Image
         run: |
-          docker push manish28/stockservice:${{ github.sha }}
-          docker push manish28/stockservice:latest
+          docker push ${{ secrets.DOCKER_USERNAME }}/stockservice:${{ github.sha }}
+          docker push ${{ secrets.DOCKER_USERNAME }}/stockservice:latest
