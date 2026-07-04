@@ -31,7 +31,7 @@ jobs:
       - name: Build Docker Image
         run: |
           docker build -t manish28/stockservice:${{ github.sha }} .
-          docker tag manish28/stockservice:${{ github.sha }} manish2802/stockservice:latest
+          docker tag manish28/stockservice:${{ github.sha }} manish28/stockservice:latest
 
       - name: Push Docker Image
         run: |
