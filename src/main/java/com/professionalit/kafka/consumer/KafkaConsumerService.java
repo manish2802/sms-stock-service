@@ -23,11 +23,11 @@ public class KafkaConsumerService {
 
 	@PostConstruct
 	public void initialize() {
-		stockPrices.put("RELIANCE", 0.0);
-		stockPrices.put("TCS", 0.0);
-		stockPrices.put("INFY", 0.0);
-		stockPrices.put("HDFCBANK", 0.0);
-		stockPrices.put("ICICIBANK", 0.0);
+//		stockPrices.put("RELIANCE", 0.0);
+//		stockPrices.put("TCS", 0.0);
+//		stockPrices.put("INFY", 0.0);
+//		stockPrices.put("HDFCBANK", 0.0);
+//		stockPrices.put("ICICIBANK", 0.0);
 		messagingTemplate.convertAndSend("/topic/stocks", stockPrices);
 		messagingTemplate.convertAndSend("/topic/top-gainers", stockPrices);
 		messagingTemplate.convertAndSend("/topic/top-losers", stockPrices);
@@ -36,23 +36,33 @@ public class KafkaConsumerService {
 	@KafkaListener(topics = "stock-topic", groupId = "stock-group", concurrency = "2")
 	public void consume(ConsumerRecord<String, String> record, StockDto message) {
 		System.out.println(Thread.currentThread().getName() + " -> " + message);
-		messagingTemplate.convertAndSend("/topic/stocks", message);
+		//messagingTemplate.convertAndSend("/topic/stocks", message);
 		redisTemplate.opsForHash().put("STOCKS", message.symbol(), message);
+		
+		StockDto stock = (StockDto) redisTemplate.opsForHash()
+		        .get("STOCKS", message.symbol());
+		messagingTemplate.convertAndSend("/topic/stocks", stock);
 	}
 
 	@KafkaListener(topics = "topgainer-stock-topic", groupId = "topgainer-stock-group", concurrency = "2")
 	public void consume1(ConsumerRecord<String, String> record, StockDto message) {
 		System.out.println(Thread.currentThread().getName() + " -> " + message);
-		messagingTemplate.convertAndSend("/topic/top-gainers", message);
+		//messagingTemplate.convertAndSend("/topic/top-gainers", message);
 		redisTemplate.opsForHash().put("TOP_GAINER_STOCKS", message.symbol(), message);
-
+		
+		StockDto stock = (StockDto) redisTemplate.opsForHash()
+		        .get("TOP_GAINER_STOCKS", message.symbol());
+		messagingTemplate.convertAndSend("/topic/top-gainers", stock);
 	}
 
 	@KafkaListener(topics = "toploser-stock-topic", groupId = "toploser-stock-group", concurrency = "2")
 	public void consume2(ConsumerRecord<String, String> record, StockDto message) {
 		System.out.println(Thread.currentThread().getName() + " -> " + message);
 		redisTemplate.opsForHash().put("TOP_LOSER_STOCKS", message.symbol(), message);
-		messagingTemplate.convertAndSend("/topic/top-losers", message);
+		//messagingTemplate.convertAndSend("/topic/top-losers", message);
+		StockDto stock = (StockDto) redisTemplate.opsForHash()
+		        .get("TOP_LOSER_STOCKS", message.symbol());
+		messagingTemplate.convertAndSend("/topic/top-losers", stock);
 
 	}
 }
