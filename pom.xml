@@ -57,11 +57,11 @@
 		</dependency>
 
 		<!-- Eureka Client -->
-		<dependency>
+	<!--	<dependency>
 			<groupId>org.springframework.cloud</groupId>
 			<artifactId>spring-cloud-starter-netflix-eureka-client</artifactId>
 		</dependency>
-
+-->
 		<!-- H2 Database -->
 		<dependency>
 			<groupId>com.h2database</groupId>
