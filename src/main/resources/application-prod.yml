@@ -20,9 +20,8 @@ spring:
 
   data:
     redis:
-      cluster:
-        nodes: ${REDIS_CLUSTER_NODES}
-        max-redirects: 3
+      host: redis
+      port: 6379
 
 
 
